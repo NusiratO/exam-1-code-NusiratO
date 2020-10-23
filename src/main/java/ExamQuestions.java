@@ -1,6 +1,7 @@
 import java.util.List;
 
-import org.graalvm.compiler.hotspot.stubs.OutOfBoundsExceptionStub;
+import javax.sql.rowset.FilteredRowSet;
+
 
 public class ExamQuestions {
 
@@ -35,17 +36,28 @@ public class ExamQuestions {
     }
 
     public static void removeThirdItem(Node firstNode){
-        Node current = firstNode;
-        int count = 1;
         if(firstNode.getItem() == null){
             throw new IllegalArgumentException();
         }
-        if(firstNode.getNext() == null){
+        Node newNode = firstNode;
+        int count = 1;
+        while(newNode.getNext() != null){
+            count++;
+            newNode = newNode.getNext();
+        }
+        if(count < 3){
+            throw new IllegalArgumentException();
+        }
+        else if(count == 3){
+            firstNode = firstNode.getNext();
             firstNode.setNext(null);
         }
-        while(current.getNext() != null || count != 3){
-            count++;
-            current = current.getNext();
+        else{
+            count = count/2;
+            while(count-- > 1){
+                firstNode = firstNode.getNext();
+            }
+            firstNode.setNext(firstNode.getNext().getNext());
         }
 
 
